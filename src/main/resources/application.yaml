@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: library-seat-booking
+
+  datasource:
+    url: jdbc:postgresql://mainline.proxy.rlwy.net:49779/railway?sslmode=require
+    username: postgres
+    password: tTFVVsXgNWwaQuOObUAKMOBjlgznRLzF
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 8080
