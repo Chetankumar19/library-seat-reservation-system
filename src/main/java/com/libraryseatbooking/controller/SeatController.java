@@ -1,41 +1,35 @@
 package com.libraryseatbooking.controller;
 
+import com.libraryseatbooking.dto.SeatAvailabilityResponseDTO;
 import com.libraryseatbooking.dto.SeatDTO;
+import com.libraryseatbooking.service.BookingService;
 import com.libraryseatbooking.service.SeatService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/seats")
 @RequiredArgsConstructor
 public class SeatController {
 
-    private final SeatService seatService;
 
-    // GET /api/seats
-    @GetMapping
-    public ResponseEntity<List<SeatDTO>> getAllSeats() {
-        return ResponseEntity.ok(seatService.getAllSeats());
-    }
+    private final BookingService bookingService;
 
-    // GET /api/seats/row/A
-    @GetMapping("/row/{row}")
-    public ResponseEntity<List<SeatDTO>> getSeatsByRow(@PathVariable String row) {
-        return ResponseEntity.ok(seatService.getSeatsByRow(row));
-    }
-
-    // GET /api/seats/id/A1
-    @GetMapping("/id/{seatId}")
-    public ResponseEntity<SeatDTO> getSeatById(@PathVariable String seatId) {
-        return ResponseEntity.ok(seatService.getSeatById(seatId));
-    }
-
-    // GET /api/seats/number/1A
-    @GetMapping("/number/{seatNumber}")
-    public ResponseEntity<SeatDTO> getSeatByNumber(@PathVariable String seatNumber) {
-        return ResponseEntity.ok(seatService.getSeatByNumber(seatNumber));
+    @GetMapping("/availability")
+    public ResponseEntity<SeatAvailabilityResponseDTO> getSeatAvailability(
+            @RequestParam LocalDate startDate,
+            @RequestParam int durationMonths
+    ) {
+        log.info("Fetching seat availability for startDate={} durationMonths={}",
+                startDate, durationMonths);
+        return ResponseEntity.ok(
+                bookingService.getSeatAvailability(startDate, durationMonths)
+        );
     }
 }
